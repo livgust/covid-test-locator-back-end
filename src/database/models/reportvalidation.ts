@@ -1,5 +1,5 @@
 import {DataType, Model, ModelStatic, Sequelize} from 'sequelize';
-export class Report extends Model {
+export class ReportValidation extends Model {
   /**
    * Helper method for defining associations.
    * This method is not a part of Sequelize lifecycle.
@@ -7,22 +7,19 @@ export class Report extends Model {
    */
   static associate(models: {[key: string]: ModelStatic<Model>}) {
     // define association here
-    Report.belongsTo(models.Place);
-    Report.hasMany(models.ReportValidation);
+    ReportValidation.belongsTo(models.Report);
   }
 }
 export default (sequelize: Sequelize, DataTypes: {[key: string]: DataType}) => {
-  Report.init(
+  ReportValidation.init(
     {
-      placeId: DataTypes.INTEGER,
-      available: DataTypes.BOOLEAN,
-      type: DataTypes.STRING,
-      limit: DataTypes.INTEGER,
+      reportId: DataTypes.NUMBER,
+      createdBy: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: 'Report',
+      modelName: 'ReportValidation',
     }
   );
-  return Report;
+  return ReportValidation;
 };

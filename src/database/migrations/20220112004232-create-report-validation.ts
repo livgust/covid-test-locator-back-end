@@ -1,28 +1,19 @@
 import {QueryInterface, DataTypes} from 'sequelize';
 
 export const up = async ({context}: {context: QueryInterface}) => {
-  await context.createTable('Reports', {
+  await context.createTable('ReportValidations', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
-    placeId: {
-      type: DataTypes.INTEGER,
+    reportId: {
+      type: DataTypes.NUMBER,
       references: {
-        model: 'places',
+        model: 'reports',
         key: 'id',
       },
-    },
-    available: {
-      type: DataTypes.BOOLEAN,
-    },
-    type: {
-      type: DataTypes.STRING,
-    },
-    limit: {
-      type: DataTypes.INTEGER,
     },
     createdBy: {
       type: DataTypes.STRING,
@@ -38,5 +29,5 @@ export const up = async ({context}: {context: QueryInterface}) => {
   });
 };
 export const down = async ({context}: {context: QueryInterface}) => {
-  await context.dropTable('Reports');
+  await context.dropTable('ReportValidations');
 };
