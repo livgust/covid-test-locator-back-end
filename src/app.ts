@@ -10,7 +10,7 @@ app.use(json());
 app.use(urlencoded({extended: true}));
 
 app.use(googlePassThrough);
-app.use('/places', placesRouter);
+app.use(placesRouter);
 
 runMigrations().then(() => {
   console.log('Migrations completed.');

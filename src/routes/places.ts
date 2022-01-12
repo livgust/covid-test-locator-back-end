@@ -6,7 +6,7 @@ import {mapDbPlaceToPlace, mapPlaceToDbPlace} from '../mappers/dataMapping';
 
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/places', async (req, res) => {
   //https://stackoverflow.com/questions/44012932/sequelize-geospatial-query-find-n-closest-points-to-a-location/46438100#46438100
   const dbPlaces = (await db.Place.findAll({
     include: [
@@ -20,12 +20,12 @@ router.get('/', async (req, res) => {
   res.json(places);
 });
 
-router.post('/', async (req, res) => {
+router.post('/places', async (req, res) => {
   const place = req.body as Place;
   const newPlace = await db.Place.create(mapPlaceToDbPlace(place));
   res.json(newPlace);
 });
 
-router.use('/:placeId/reports', reportRouter);
+router.use('/places/:placeId', reportRouter);
 
 export default router;

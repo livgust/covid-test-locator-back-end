@@ -6,7 +6,7 @@ import reportValidationsRouter from '../reportValidations';
 
 const router = Router({mergeParams: true});
 
-router.post('/', async (req, res) => {
+router.post('/reports', async (req, res) => {
   const reportToSave = validateAndFormatPostRequest(
     req.params,
     req.body as Report
@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
   res.json(savedReport);
 });
 
-router.use('/:reportId/reportValidations', reportValidationsRouter);
+router.use('/reports/:reportId', reportValidationsRouter);
 
 export function validateAndFormatPostRequest(
   params: ParamsDictionary,

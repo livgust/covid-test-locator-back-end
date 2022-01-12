@@ -5,7 +5,7 @@ import {ReportValidation} from '../../types';
 
 const router = Router({mergeParams: true});
 
-router.post('/', async (req, res) => {
+router.post('/reportValidations', async (req, res) => {
   const requestValidation = validateAndFormatPostRequest(
     req.params,
     req.body as ReportValidation
