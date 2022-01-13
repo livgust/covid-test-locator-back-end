@@ -1,9 +1,14 @@
+import path from 'path';
 import {Umzug, SequelizeStorage} from 'umzug';
 import db from '../models';
+const scriptName = path.basename(__filename);
 
 const umzug = new Umzug({
   migrations: {
-    glob: ['*.ts', {ignore: 'index.ts', cwd: 'src/database/migrations'}],
+    glob: [
+      '!(*.d).[j|t]s',
+      {ignore: scriptName, cwd: path.dirname(__filename)},
+    ],
   },
   context: db.sequelize.getQueryInterface(),
   storage: new SequelizeStorage({sequelize: db.sequelize}),
