@@ -7,8 +7,6 @@ import Report from './report';
 import ReportValidation from './reportvalidation';
 
 const models = [Place, Report, ReportValidation];
-
-const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = (configFile as {[key: string]: Options})[env];
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,12 +20,12 @@ const sequelize = new Sequelize(
 );
 
 models.forEach(model => {
-  model(
+  const initModel = model(
     sequelize,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (Sequelize as any).DataTypes
   );
-  db[model.name] = model;
+  db[initModel.name] = initModel;
 });
 
 Object.keys(db).forEach(modelName => {

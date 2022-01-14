@@ -15,9 +15,14 @@ terraform {
 
 provider "aws" {
   region = "us-east-1"
+  default_tags {
+    tags = {
+      project = var.name
+      env     = var.env
+    }
+  }
 }
 
-resource "aws_ecr_repository" "ecr" {
-  name                 = "${var.name}-${var.env}"
-  image_tag_mutability = "MUTABLE"
+resource "aws_cloudwatch_log_group" "log_group" {
+  name = "${var.name}-${var.env}"
 }
