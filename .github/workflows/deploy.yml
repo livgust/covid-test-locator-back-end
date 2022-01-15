@@ -71,7 +71,7 @@ jobs:
       - name: Terraform deploy
         id: terraform-deploy
         run: |
-          terraform workspace prod
+          terraform workspace select prod
           terraform fmt -check
           terraform init
           terraform validate
