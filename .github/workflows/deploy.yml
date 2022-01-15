@@ -2,7 +2,7 @@ name: Deploy to Amazon ECR
 on:
   push:
     branches:
-      - 'first-pass'
+      - 'main'
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: covid-test-locator-dev
@@ -70,6 +70,7 @@ jobs:
       - name: Terraform deploy
         id: terraform-deploy
         run: |
+          terraform workspace prod
           terraform fmt -check
           terraform init
           terraform validate
