@@ -47,6 +47,9 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
       "environment" : [{
         "name" : "NODE_ENV",
         "value" : local.node_env_mapping[var.env]
+        }, {
+        "name" : "GOOGLE_API_KEY",
+        "value" : var.google_api_key
       }]
       portMappings = [{
         protocol      = "tcp"

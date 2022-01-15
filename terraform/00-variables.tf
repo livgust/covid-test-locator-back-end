@@ -26,3 +26,7 @@ variable "domain_name" {
   type    = string
   default = "covidtestcollab.com"
 }
+
+variable "google_api_key" {
+  type = string
+}
