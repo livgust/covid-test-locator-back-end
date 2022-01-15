@@ -5,13 +5,13 @@ on:
       - 'main'
 env:
   AWS_REGION: us-east-1
-  ECR_REPOSITORY: covid-test-locator-dev
+  ECR_REPOSITORY: covid-test-locator-prod
   IMAGE_TAG: ${{ github.sha }}
 jobs:
   ecr-deploy:
     name: Deploy to ECR
     runs-on: ubuntu-latest
-    environment: dev
+    environment: prod
     outputs:
       image-name: ${{ steps.build-image.outputs.image-name }}
 
@@ -42,12 +42,13 @@ jobs:
           # push it to ECR so that it can
           # be deployed to ECS.
           docker build -t ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image-name::${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG"
+          # COMMENTING BELOW SO WE CAN MAKE ECR FIRST
+          # docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
+          # echo "::set-output name=image-name::${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG"
   tf-deploy:
     name: Deploy via Terraform
     runs-on: ubuntu-latest
-    environment: dev
+    environment: prod
     needs: ecr-deploy
     defaults:
       run:
