@@ -54,33 +54,29 @@ resource "aws_alb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
+    type = "redirect"
+
+    redirect {
+      port        = 443
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+}
+
+resource "aws_alb_listener" "https" {
+  load_balancer_arn = aws_lb.alb.id
+  port              = 443
+  protocol          = "HTTPS"
+
+  ssl_policy      = "ELBSecurityPolicy-2016-08"
+  certificate_arn = aws_acm_certificate.certificate.arn
+
+  default_action {
     target_group_arn = aws_alb_target_group.main.id
     type             = "forward"
   }
-  # default_action {
-  #   type = "redirect"
-
-  #   redirect {
-  #     port        = 443
-  #     protocol    = "HTTPS"
-  #     status_code = "HTTP_301"
-  #   }
-  # }
 }
-
-# resource "aws_alb_listener" "https" {
-#   load_balancer_arn = aws_lb.alb.id
-#   port              = 443
-#   protocol          = "HTTPS"
-
-#   ssl_policy      = "ELBSecurityPolicy-2016-08"
-#   certificate_arn = aws_acm_certificate.certificate.arn
-
-#   default_action {
-#     target_group_arn = aws_alb_target_group.main.id
-#     type             = "forward"
-#   }
-# }
 
 output "url" {
   value = "http://${aws_lb.alb.dns_name}"
