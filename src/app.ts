@@ -1,8 +1,23 @@
-import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express, {json, urlencoded} from 'express';
+import {runMigrations} from './database/migrations';
+import routes from './routes';
+import cors from 'cors';
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
-  console.log(`Timezones by location application is running on port ${port}.`);
+app.use(cors());
+app.use(json());
+app.use(urlencoded({extended: true}));
+
+app.use(routes);
+
+runMigrations().then(() => {
+  console.log('Migrations completed.');
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}.`);
+  });
 });
