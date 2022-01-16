@@ -9,9 +9,9 @@ module "vpc" {
   enable_nat_gateway     = true
 }
 
-resource "aws_acm_certificate" "certificate" {
-  domain_name       = var.domain_name
-  validation_method = "DNS"
+data "aws_acm_certificate" "certificate" {
+  domain   = "*.${var.domain_name}"
+  statuses = ["ISSUED"]
 }
 
 resource "aws_security_group" "ecs_security_group" {
