@@ -1,5 +1,3 @@
-import fs from 'fs';
-import path from 'path';
 import {Options, Sequelize} from 'sequelize';
 import configFile from '../config/config.json';
 import Place from './place';

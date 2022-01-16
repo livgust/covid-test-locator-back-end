@@ -24,7 +24,7 @@ it('maps results to a Place type', async () => {
         },
         name: 'CVS Pharmacy',
         place_id: 'ChIJwVUXDrN344kRwnECSioprLk',
-        vicinity: '833 Massachusetts Ave, Arlington',
+        formatted_address: '833 Massachusetts Ave, Arlington',
       } as unknown as google.maps.places.PlaceResult,
     ])
   ).toEqual([
@@ -51,7 +51,7 @@ it('searches for Places with same locations or googlePlaceIds', async () => {
       },
       name: 'CVS Pharmacy',
       place_id: 'ChIJwVUXDrN344kRwnECSioprLk',
-      vicinity: '833 Massachusetts Ave, Arlington',
+      formatted_address: '833 Massachusetts Ave, Arlington',
     } as unknown as google.maps.places.PlaceResult,
   ]);
   expect(db.Place.findAll).toHaveBeenCalledWith({
@@ -156,7 +156,7 @@ it('leaves an unmatched place alone', async () => {
     },
     name: 'CVS Pharmacy',
     place_id: 'ChIJwVUXDrN344kRwnECSioprLk',
-    vicinity: '833 Massachusetts Ave, Arlington',
+    formatted_address: '833 Massachusetts Ave, Arlington',
   } as unknown as google.maps.places.PlaceResult;
   expect(await mergeGooglePlacesWithPlaces([mockGooglePlace])).toEqual([
     {

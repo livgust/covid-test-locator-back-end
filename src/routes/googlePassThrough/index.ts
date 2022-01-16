@@ -11,12 +11,12 @@ router.use('/searchGooglePlaces', async (req, res) => {
   // get locations from Google
   const params = new URLSearchParams({
     location,
-    keyword,
+    input: keyword,
     key: process.env.GOOGLE_API_KEY as string,
     radius: '50000', // radius isn't _supposed_ to be required but evidently it is, in practice
   }).toString();
   const response = await fetch(
-    `https://maps.googleapis.com/maps/api/place/nearbysearch/json?${params}`
+    `https://maps.googleapis.com/maps/api/place/textsearch/json?${params}`
   );
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const responseJson = (await response.json()) as any;

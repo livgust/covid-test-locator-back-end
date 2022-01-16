@@ -8,7 +8,7 @@ export const mergeGooglePlacesWithPlaces = async (
   const locations: Place['location'][] = [];
   const googlePlaceIds: string[] = [];
   const mappedGooglePlaces = googlePlaces.map(
-    ({geometry, name, place_id, vicinity}) => {
+    ({geometry, name, place_id, formatted_address}) => {
       const location = {
         lat: geometry!.location!.lat as unknown as number,
         long: geometry!.location!.lng as unknown as number,
@@ -19,7 +19,7 @@ export const mergeGooglePlacesWithPlaces = async (
         location,
         name,
         googlePlaceId: place_id,
-        vicinity,
+        vicinity: formatted_address,
       } as Place;
     }
   );
