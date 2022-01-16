@@ -1,33 +1,33 @@
 import {QueryInterface, DataTypes} from 'sequelize';
 
 export const up = async ({context}: {context: QueryInterface}) => {
-  await context.createTable('ReportValidations', {
+  await context.createTable('report_validations', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
-    reportId: {
-      type: DataTypes.NUMBER,
+    report_id: {
+      type: DataTypes.INTEGER,
       references: {
         model: 'reports',
         key: 'id',
       },
     },
-    createdBy: {
+    created_by: {
       type: DataTypes.STRING,
     },
-    createdAt: {
+    created_at: {
       allowNull: false,
       type: DataTypes.DATE,
     },
-    updatedAt: {
+    updated_at: {
       allowNull: false,
       type: DataTypes.DATE,
     },
   });
 };
 export const down = async ({context}: {context: QueryInterface}) => {
-  await context.dropTable('ReportValidations');
+  await context.dropTable('report_validations');
 };

@@ -50,6 +50,21 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
         }, {
         "name" : "GOOGLE_API_KEY",
         "value" : var.google_api_key
+        }, {
+        "name" : "DB_ENDPOINT",
+        "value" : module.cluster.cluster_endpoint
+        }, {
+        "name" : "DB_NAME",
+        "value" : module.cluster.cluster_database_name
+        }, {
+        "name" : "DB_USERNAME",
+        "value" : module.cluster.cluster_master_username
+        }, {
+        "name" : "DB_PASSWORD",
+        "value" : module.cluster.cluster_master_password
+        }, {
+        "name" : "DB_PORT",
+        "value" : "${tostring(module.cluster.cluster_port)}"
       }]
       portMappings = [{
         protocol      = "tcp"

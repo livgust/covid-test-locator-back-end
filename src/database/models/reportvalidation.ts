@@ -13,12 +13,12 @@ export class ReportValidation extends Model {
 export default (sequelize: Sequelize, DataTypes: {[key: string]: DataType}) => {
   ReportValidation.init(
     {
-      reportId: DataTypes.NUMBER,
+      reportId: DataTypes.INTEGER,
       createdBy: DataTypes.STRING,
     },
     {
       sequelize,
-      modelName: 'ReportValidation',
+      underscored: true,
     }
   );
   return ReportValidation;

@@ -1,14 +1,14 @@
 import {QueryInterface, DataTypes} from 'sequelize';
 
 export const up = async ({context}: {context: QueryInterface}) => {
-  await context.createTable('Reports', {
+  await context.createTable('reports', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER,
     },
-    placeId: {
+    place_id: {
       type: DataTypes.INTEGER,
       references: {
         model: 'places',
@@ -24,19 +24,19 @@ export const up = async ({context}: {context: QueryInterface}) => {
     limit: {
       type: DataTypes.INTEGER,
     },
-    createdBy: {
+    created_by: {
       type: DataTypes.STRING,
     },
-    createdAt: {
+    created_at: {
       allowNull: false,
       type: DataTypes.DATE,
     },
-    updatedAt: {
+    updated_at: {
       allowNull: false,
       type: DataTypes.DATE,
     },
   });
 };
 export const down = async ({context}: {context: QueryInterface}) => {
-  await context.dropTable('Reports');
+  await context.dropTable('reports');
 };

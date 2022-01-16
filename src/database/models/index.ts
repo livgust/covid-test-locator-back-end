@@ -1,5 +1,5 @@
 import {Options, Sequelize} from 'sequelize';
-import configFile from '../config/config.json';
+import configFile from '../config/config';
 import Place from './place';
 import Report from './report';
 import ReportValidation from './reportvalidation';

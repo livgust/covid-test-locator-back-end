@@ -3,6 +3,11 @@ variable "name" {
   default = "covid-test-locator"
 }
 
+variable "name_alphanumeric" {
+  type    = string
+  default = "covidtestlocator"
+}
+
 variable "env" {
   type    = string
   default = "dev"

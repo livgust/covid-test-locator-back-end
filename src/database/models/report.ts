@@ -21,7 +21,7 @@ export default (sequelize: Sequelize, DataTypes: {[key: string]: DataType}) => {
     },
     {
       sequelize,
-      modelName: 'Report',
+      underscored: true,
     }
   );
   return Report;
