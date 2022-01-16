@@ -42,9 +42,8 @@ jobs:
           # push it to ECR so that it can
           # be deployed to ECS.
           docker build -t ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG .
-          # COMMENTING BELOW SO WE CAN MAKE ECR FIRST
-          # docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
-          # echo "::set-output name=image-name::${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG"
+          docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image-name::${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG"
   tf-deploy:
     name: Deploy via Terraform
     runs-on: ubuntu-latest
@@ -71,8 +70,8 @@ jobs:
       - name: Terraform deploy
         id: terraform-deploy
         run: |
-          terraform workspace select prod
           terraform fmt -check
           terraform init
+          terraform workspace select prod
           terraform validate
-          terraform apply -auto-approve -var="image_name=${{ needs.ecr-deploy.outputs.image-name }}" -var "google_api_key=${{ secrets.GOOGLE_API_KEY }}"
+          terraform apply -auto-approve -var="env=prod" -var="image_name=${{ needs.ecr-deploy.outputs.image-name }}" -var "google_api_key=${{ secrets.GOOGLE_API_KEY }}"
