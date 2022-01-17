@@ -1,7 +1,13 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import express, {json, Request, Response, urlencoded} from 'express';
+import express, {
+  json,
+  NextFunction,
+  Request,
+  Response,
+  urlencoded,
+} from 'express';
 import {runMigrations} from './database/migrations';
 import routes from './routes';
 import cors from 'cors';
@@ -16,10 +22,12 @@ app.use(urlencoded({extended: true}));
 app.use(routes);
 
 // final `use`: the default error responder
-app.use((error: Error, req: Request, res: Response) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(error);
   const status = 500;
   const message = error.message || 'Something went wrong';
-  res.sendStatus(status).send({
+  res.status(status).send({
     status,
     message,
   });

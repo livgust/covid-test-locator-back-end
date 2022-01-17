@@ -1,9 +1,10 @@
 export default {
   development: {
-    username: 'root',
-    database: 'database_development',
-    storage: ':memory:',
-    dialect: 'sqlite',
+    username: 'postgres',
+    database: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    dialect: 'postgres',
   },
   test: {
     username: 'root',
