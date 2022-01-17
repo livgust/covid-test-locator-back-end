@@ -3,18 +3,23 @@ import {ParamsDictionary} from 'express-serve-static-core';
 import db from '../../database/models';
 import {Report} from '../../types';
 import reportValidationsRouter from '../reportValidations';
+import {mapReportToDbReport} from '../../mappers/dataMapping';
 
 const router = Router({mergeParams: true});
 
-router.post('/reports', async (req, res) => {
-  const reportToSave = validateAndFormatPostRequest(
-    req.params,
-    req.body as Report
-  );
+router.post('/reports', async (req, res, next) => {
+  try {
+    const reportToSave = validateAndFormatPostRequest(
+      req.params,
+      req.body as Report
+    );
 
-  const savedReport = await db.Report.create(reportToSave);
+    const savedReport = await db.Report.create(reportToSave);
 
-  res.json(savedReport);
+    res.json(savedReport);
+  } catch (e) {
+    next(e);
+  }
 });
 
 router.use('/reports/:reportId', reportValidationsRouter);
@@ -35,7 +40,7 @@ export function validateAndFormatPostRequest(
     throw new RangeError('placeId in params must equal placeId in body');
   }
 
-  return returnReport;
+  return mapReportToDbReport(returnReport);
 }
 
 export default router;

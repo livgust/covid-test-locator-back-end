@@ -5,14 +5,18 @@ import {ReportValidation} from '../../types';
 
 const router = Router({mergeParams: true});
 
-router.post('/reportValidations', async (req, res) => {
-  const requestValidation = validateAndFormatPostRequest(
-    req.params,
-    req.body as ReportValidation
-  );
+router.post('/reportValidations', async (req, res, next) => {
+  try {
+    const requestValidation = validateAndFormatPostRequest(
+      req.params,
+      req.body as ReportValidation
+    );
 
-  const addedValidation = await db.ReportValidation.create(requestValidation);
-  res.json(addedValidation);
+    const addedValidation = await db.ReportValidation.create(requestValidation);
+    res.json(addedValidation);
+  } catch (e) {
+    next(e);
+  }
 });
 
 export function validateAndFormatPostRequest(

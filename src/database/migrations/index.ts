@@ -16,7 +16,6 @@ const umzug = new Umzug({
 });
 
 export async function runMigrations() {
-  await umzug.down({to: 0}); // TEMPORARY
   return umzug.up();
 }
 
