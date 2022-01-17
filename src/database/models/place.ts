@@ -16,7 +16,8 @@ export default (sequelize: Sequelize, DataTypes: {[key: string]: DataType}) => {
       googlePlaceId: DataTypes.STRING,
       name: DataTypes.STRING,
       vicinity: DataTypes.STRING,
-      location: DataTypes.JSON,
+      latitude: DataTypes.DECIMAL,
+      longitude: DataTypes.DECIMAL,
       createdBy: DataTypes.STRING,
     },
     {

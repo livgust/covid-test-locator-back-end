@@ -1,7 +1,9 @@
 import {QueryInterface, DataTypes} from 'sequelize';
 
-export const up = async ({context}: {context: QueryInterface}) => {
-  await context.createTable('places', {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const up = async ({context}: {context: any}) => {
+  const queryInterface = context.getQueryInterface() as QueryInterface;
+  await queryInterface.createTable('places', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -17,8 +19,11 @@ export const up = async ({context}: {context: QueryInterface}) => {
     vicinity: {
       type: DataTypes.STRING,
     },
-    location: {
-      type: DataTypes.JSON,
+    latitude: {
+      type: DataTypes.DECIMAL(13, 8),
+    },
+    longitude: {
+      type: DataTypes.DECIMAL(13, 8),
     },
     created_by: {
       type: DataTypes.STRING,
@@ -33,6 +38,8 @@ export const up = async ({context}: {context: QueryInterface}) => {
     },
   });
 };
-export const down = async ({context}: {context: QueryInterface}) => {
-  await context.dropTable('places');
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const down = async ({context}: {context: any}) => {
+  const queryInterface = context.getQueryInterface() as QueryInterface;
+  await queryInterface.dropTable('places');
 };

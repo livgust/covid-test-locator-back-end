@@ -18,6 +18,7 @@ export default (sequelize: Sequelize, DataTypes: {[key: string]: DataType}) => {
       available: DataTypes.BOOLEAN,
       type: DataTypes.STRING,
       limit: DataTypes.INTEGER,
+      reportedAt: DataTypes.DATE,
     },
     {
       sequelize,

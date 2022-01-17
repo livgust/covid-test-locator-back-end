@@ -1,7 +1,9 @@
 import {QueryInterface, DataTypes} from 'sequelize';
 
-export const up = async ({context}: {context: QueryInterface}) => {
-  await context.createTable('report_validations', {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const up = async ({context}: {context: any}) => {
+  const queryInterface = context.getQueryInterface() as QueryInterface;
+  await queryInterface.createTable('report_validations', {
     id: {
       allowNull: false,
       autoIncrement: true,
@@ -28,6 +30,8 @@ export const up = async ({context}: {context: QueryInterface}) => {
     },
   });
 };
-export const down = async ({context}: {context: QueryInterface}) => {
-  await context.dropTable('report_validations');
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const down = async ({context}: {context: any}) => {
+  const queryInterface = context.getQueryInterface() as QueryInterface;
+  await queryInterface.dropTable('report_validations');
 };

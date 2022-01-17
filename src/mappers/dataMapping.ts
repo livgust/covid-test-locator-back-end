@@ -8,15 +8,23 @@ import {
 } from '../types';
 
 export const mapDbReportToReport = (dbReport: DbReport): Report => {
-  const {id, placeId, available, type, limit, createdAt, ReportValidations} =
-    dbReport;
+  const {
+    id,
+    placeId,
+    available,
+    type,
+    limit,
+    createdAt,
+    ReportValidations,
+    reportedAt,
+  } = dbReport;
   return {
     id,
     placeId,
     available,
     type,
     limit: limit === null ? undefined : limit,
-    created: createdAt,
+    created: reportedAt || createdAt,
     validations: ReportValidations?.map(mapDbValidationToValidation),
   };
 };
@@ -29,20 +37,24 @@ export const mapReportToDbReport = (report: Report): DbReport => {
     available,
     type,
     limit: limit !== undefined ? limit : null,
-    createdAt: created,
+    reportedAt: created,
     ReportValidations: validations?.map(mapValidationToDbValidation),
   };
   return dbReport;
 };
 
 export const mapDbPlaceToPlace = (dbPlace: DbPlace): Place => {
-  const {id, googlePlaceId, name, vicinity, location, Reports} = dbPlace;
+  const {id, googlePlaceId, name, vicinity, latitude, longitude, Reports} =
+    dbPlace;
   return {
     id,
     googlePlaceId,
     name,
     vicinity,
-    location,
+    location: {
+      lat: latitude,
+      long: longitude,
+    },
     reports: Reports?.map(mapDbReportToReport),
   };
 };
@@ -54,7 +66,8 @@ export const mapPlaceToDbPlace = (place: Place): DbPlace => {
     googlePlaceId,
     name,
     vicinity,
-    location,
+    latitude: location.lat,
+    longitude: location.long,
   };
   return dbPlace;
 };

@@ -52,16 +52,15 @@ export const searchForPlacesWithLocationsAndGooglePlaceIds = async ({
   locations: {lat: number; long: number}[];
   googlePlaceIds: string[];
 }): Promise<Place[]> => {
+  const locationsAndMap = locations.map(({lat, long}) => ({
+    [db.Sequelize.Op.and]: [{latitude: lat}, {longitude: long}],
+  }));
   const results = await db.Place.findAll({
     where: {
       [db.Sequelize.Op.or]: [
         {
-          googlePlaceId: {
-            [db.Sequelize.Op.or]: googlePlaceIds,
-          },
-          location: {
-            [db.Sequelize.Op.or]: locations,
-          },
+          googlePlaceId: googlePlaceIds,
+          [db.Sequelize.Op.or]: locationsAndMap,
         },
       ],
     },

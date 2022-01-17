@@ -10,12 +10,13 @@ const umzug = new Umzug({
       {ignore: scriptName, cwd: path.dirname(__filename)},
     ],
   },
-  context: db.sequelize.getQueryInterface(),
+  context: db.sequelize,
   storage: new SequelizeStorage({sequelize: db.sequelize}),
   logger: console,
 });
 
 export async function runMigrations() {
+  await umzug.down({to: 0}); // TEMPORARY
   return umzug.up();
 }
 

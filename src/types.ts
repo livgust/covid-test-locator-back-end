@@ -15,10 +15,8 @@ export type DbPlace = {
   googlePlaceId: string;
   name: string;
   vicinity: string;
-  location: {
-    lat: number;
-    long: number;
-  };
+  latitude: number;
+  longitude: number;
   createdBy?: string | null;
   createdAt?: string;
   updatedAt?: string;
@@ -56,6 +54,7 @@ export type DbReport = {
   limit: number | null;
   createdBy?: string | null;
   createdAt?: string;
+  reportedAt?: string;
   updatedAt?: string;
   ReportValidations?: DbReportValidation[];
 };

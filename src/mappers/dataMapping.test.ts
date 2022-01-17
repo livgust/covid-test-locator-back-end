@@ -49,6 +49,27 @@ describe('maps DB reports to Reports', () => {
       created: 'this-is-a-date-string',
     });
   });
+  it('uses reportedAt for precedence', () => {
+    const exampleDbReport = {
+      id: 1,
+      placeId: 2,
+      available: true,
+      type: 'PCR test',
+      limit: 2,
+      reportedAt: 'reported-datetime',
+      createdAt: 'created-datetime',
+      createdBy: 'some-user',
+      updatedAt: 'this-is-a-date-string',
+    } as DbReport;
+    expect(mapDbReportToReport(exampleDbReport)).toEqual({
+      id: 1,
+      placeId: 2,
+      available: true,
+      type: 'PCR test',
+      limit: 2,
+      created: 'reported-datetime',
+    });
+  });
 });
 
 describe('maps DB places to Places', () => {
@@ -58,10 +79,8 @@ describe('maps DB places to Places', () => {
       googlePlaceId: 'ABC_123',
       name: 'Test Pharmacy',
       vicinity: '123 Easy Street',
-      location: {
-        lat: 100,
-        long: 100,
-      },
+      latitude: 100,
+      longitude: 100,
       createdAt: 'this-is-a-date-string',
       createdBy: 'some-user',
       updatedAt: 'this-is-a-date-string',
@@ -84,10 +103,8 @@ describe('maps DB places to Places', () => {
       googlePlaceId: 'ABC_123',
       name: 'Test Pharmacy',
       vicinity: '123 Easy Street',
-      location: {
-        lat: 100,
-        long: 100,
-      },
+      latitude: 100,
+      longitude: 100,
       createdAt: 'this-is-a-date-string',
       createdBy: 'some-user',
       updatedAt: 'this-is-a-date-string',
@@ -142,10 +159,8 @@ describe('maps Place to DbPlace', () => {
       googlePlaceId: 'ABC_DEF',
       name: 'Example Place',
       vicinity: '123 Easy St',
-      location: {
-        lat: 100,
-        long: 100,
-      },
+      latitude: 100,
+      longitude: 100,
     });
   });
   it('adds ID if it exists', () => {
@@ -164,10 +179,8 @@ describe('maps Place to DbPlace', () => {
       googlePlaceId: 'ABC_DEF',
       name: 'Example Place',
       vicinity: '123 Easy St',
-      location: {
-        lat: 100,
-        long: 100,
-      },
+      latitude: 100,
+      longitude: 100,
     });
   });
 });
@@ -199,7 +212,7 @@ describe('maps report to db report', () => {
       available: true,
       limit: 0,
       type: 'PCR test',
-      createdAt: 'this-is-a-timestamp',
+      reportedAt: 'this-is-a-timestamp',
     });
   });
 });
