@@ -6,7 +6,7 @@
 
 1. To run locally, first start a Docker container:
 
-   `docker run --rm -e PORGRES_HOST_AUTH_METHOD=trust -p 5432:5432 -it postgres:14.1-alpine`
+   `docker run --rm -e POSTGRES_HOST_AUTH_METHOD=trust -p 5432:5432 -it postgres:14.1-alpine`
 
 1. Then start the node server:
 

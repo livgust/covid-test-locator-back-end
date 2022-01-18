@@ -15,8 +15,8 @@ describe('validateAndFormatPostRequest', () => {
   });
 
   it("applies param placeId to body if body's placeId doesn't exist", () => {
-    expect(validateAndFormatPostRequest({placeId: '1'}, {} as Report)).toEqual({
-      placeId: 1,
-    });
+    expect(
+      validateAndFormatPostRequest({placeId: '1'}, {} as Report).placeId
+    ).toEqual(1);
   });
 });

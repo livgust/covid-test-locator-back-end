@@ -2,7 +2,7 @@ import {mergeGooglePlacesWithPlaces} from './googlePlacesToPlaces';
 import db from '../database/models';
 
 jest.mock('../database/models', () => ({
-  Sequelize: {Op: {or: 'or'}},
+  Sequelize: {Op: {or: 'or', and: 'and'}},
   Place: {
     findAll: jest.fn().mockImplementation(() => Promise.resolve([])),
   },
@@ -58,8 +58,12 @@ it('searches for Places with same locations or googlePlaceIds', async () => {
     where: {
       or: [
         {
-          googlePlaceId: {or: ['ChIJwVUXDrN344kRwnECSioprLk']},
-          location: {or: [{lat: 42.4171424, long: -71.160361}]},
+          googlePlaceId: ['ChIJwVUXDrN344kRwnECSioprLk'],
+          or: [
+            {
+              and: [{latitude: 42.4171424}, {longitude: -71.160361}],
+            },
+          ],
         },
       ],
     },
