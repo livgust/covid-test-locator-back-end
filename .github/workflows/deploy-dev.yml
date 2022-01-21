@@ -1,0 +1,74 @@
+name: Deploy to Amazon ECR
+on: [push]
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: covid-test-locator-dev
+  IMAGE_TAG: ${{ github.sha }}
+jobs:
+  ecr-deploy:
+    name: Deploy to ECR
+    runs-on: ubuntu-latest
+    environment: dev
+    outputs:
+      image-name: ${{ steps.build-image.outputs.image-name }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@13d241b293754004c80624b5567555c4a39ffbe3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          mask-aws-account-id: 'no'
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@aaf69d68aa3fb14c1d5a6be9ac61fe15b48453a2
+
+      - name: Get package version for tagging
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push ${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image-name::${{ steps.login-ecr.outputs.registry }}/$ECR_REPOSITORY:$IMAGE_TAG"
+  tf-deploy:
+    name: Deploy via Terraform
+    runs-on: ubuntu-latest
+    environment: dev
+    needs: ecr-deploy
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@13d241b293754004c80624b5567555c4a39ffbe3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Terraform setup
+        uses: hashicorp/setup-terraform@v1
+        id: terraform-setup
+
+      - name: Terraform deploy
+        id: terraform-deploy
+        run: |
+          terraform fmt -check
+          terraform init
+          terraform workspace select default
+          terraform validate
+          terraform apply -auto-approve -var="env=dev" -var="image_name=${{ needs.ecr-deploy.outputs.image-name }}" -var "google_api_key=${{ secrets.GOOGLE_API_KEY }}"

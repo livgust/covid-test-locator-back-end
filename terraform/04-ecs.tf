@@ -1,7 +1,7 @@
 locals {
   node_env_mapping = {
     prod = "production"
-    dev  = "development"
+    dev  = "integration"
   }
   ecs_task_container_name = "${var.name}-${var.env}"
 }
