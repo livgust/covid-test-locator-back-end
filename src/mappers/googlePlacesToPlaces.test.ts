@@ -91,6 +91,7 @@ it('merges results based on googlePlaceId', async () => {
         name: 'CVS Pharmacy',
         latitude: 1,
         longitude: 1,
+        get: () => {},
       },
     ])
   );
@@ -129,6 +130,7 @@ it('merges results based on location', async () => {
         longitude: -71.160361,
         name: 'CVS store, not pharmacy',
         vicinity: '833 Massachusetts Ave, Arlington',
+        get: () => {},
       },
     ])
   );

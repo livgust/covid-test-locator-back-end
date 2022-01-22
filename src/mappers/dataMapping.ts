@@ -1,5 +1,6 @@
 import {
   DbPlace,
+  DbPlaceWithGetter,
   DbReport,
   DbReportValidation,
   Place,
@@ -43,7 +44,7 @@ export const mapReportToDbReport = (report: Report): DbReport => {
   return dbReport;
 };
 
-export const mapDbPlaceToPlace = (dbPlace: DbPlace): Place => {
+export const mapDbPlaceToPlace = (dbPlace: DbPlaceWithGetter): Place => {
   const {id, googlePlaceId, name, vicinity, latitude, longitude, Reports} =
     dbPlace;
   return {
@@ -55,6 +56,7 @@ export const mapDbPlaceToPlace = (dbPlace: DbPlace): Place => {
       lat: latitude,
       long: longitude,
     },
+    distance: dbPlace.get('distance'),
     reports: Reports?.map(mapDbReportToReport),
   };
 };

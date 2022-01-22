@@ -1,11 +1,21 @@
 import {Router} from 'express';
 import reportRouter from './reports/';
 import db from '../database/models';
-import {DbPlace, Place} from '../types';
+import {DbPlaceWithGetter, Place} from '../types';
 import {mapDbPlaceToPlace, mapPlaceToDbPlace} from '../mappers/dataMapping';
 
 const router = Router();
 
+const haversineFormula = (latitude: string, longitude: string) =>
+  db.sequelize.literal(
+    '3959 * acos(cos(radians(' +
+      latitude +
+      ')) * cos(radians(latitude)) * cos(radians(' +
+      longitude +
+      ') - radians(longitude)) + sin(radians(' +
+      latitude +
+      ')) * sin(radians(latitude)))'
+  );
 /**
  * Get the closest 50 places, ordered by distance (nearest first)
  */
@@ -23,23 +33,19 @@ router.get('/places', async (req, res, next) => {
       attributes: {
         include: [
           [
-            db.sequelize.literal(
-              '6371 * acos(cos(radians(' +
-                latitude +
-                ')) * cos(radians(latitude)) * cos(radians(' +
-                longitude +
-                ') - radians(longitude)) + sin(radians(' +
-                latitude +
-                ')) * sin(radians(latitude)))'
-            ),
-            'distance',
+            haversineFormula(latitude, longitude),
+            'distance', // in miles
           ],
         ],
       },
+      where: db.sequelize.where(haversineFormula(latitude, longitude), {
+        [db.Sequelize.Op.lt]: 50,
+      }),
       order: db.sequelize.col('distance'),
-      limit: 50,
-    })) as DbPlace[];
+    })) as DbPlaceWithGetter[];
+    console.log(db.Pl);
     const places = dbPlaces.map(mapDbPlaceToPlace);
+    console.log(places);
     res.json(places);
   } catch (e) {
     next(e);

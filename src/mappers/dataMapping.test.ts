@@ -1,4 +1,4 @@
-import {DbPlace, DbReport, Report} from '../types';
+import {DbPlaceWithGetter, DbReport, Report} from '../types';
 import {
   mapDbPlaceToPlace,
   mapDbReportToReport,
@@ -84,7 +84,8 @@ describe('maps DB places to Places', () => {
       createdAt: 'this-is-a-date-string',
       createdBy: 'some-user',
       updatedAt: 'this-is-a-date-string',
-    } as DbPlace;
+      get: () => {},
+    } as DbPlaceWithGetter;
     expect(mapDbPlaceToPlace(exampleDbPlace)).toEqual({
       id: 1,
       googlePlaceId: 'ABC_123',
@@ -108,6 +109,7 @@ describe('maps DB places to Places', () => {
       createdAt: 'this-is-a-date-string',
       createdBy: 'some-user',
       updatedAt: 'this-is-a-date-string',
+      get: () => {},
       Reports: [
         {
           id: 1,
@@ -120,7 +122,7 @@ describe('maps DB places to Places', () => {
           updatedAt: 'this-is-a-date-string',
         },
       ],
-    } as DbPlace;
+    } as DbPlaceWithGetter;
     expect(mapDbPlaceToPlace(exampleDbPlace)).toEqual({
       id: 1,
       googlePlaceId: 'ABC_123',
@@ -140,6 +142,36 @@ describe('maps DB places to Places', () => {
           created: 'this-is-a-date-string',
         },
       ],
+    });
+  });
+
+  it('optionally adds distance', () => {
+    const exampleDbPlace = {
+      id: 1,
+      googlePlaceId: 'ABC_123',
+      name: 'Test Pharmacy',
+      vicinity: '123 Easy Street',
+      latitude: 100,
+      longitude: 100,
+      createdAt: 'this-is-a-date-string',
+      createdBy: 'some-user',
+      updatedAt: 'this-is-a-date-string',
+      get: field => {
+        if (field === 'distance') {
+          return 1.5;
+        } else return;
+      },
+    } as DbPlaceWithGetter;
+    expect(mapDbPlaceToPlace(exampleDbPlace)).toEqual({
+      id: 1,
+      googlePlaceId: 'ABC_123',
+      name: 'Test Pharmacy',
+      vicinity: '123 Easy Street',
+      location: {
+        lat: 100,
+        long: 100,
+      },
+      distance: 1.5,
     });
   });
 });

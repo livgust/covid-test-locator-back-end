@@ -8,6 +8,7 @@ export type Place = {
     long: number;
   };
   reports?: Report[];
+  distance?: number;
 };
 
 export type DbPlace = {
@@ -22,6 +23,11 @@ export type DbPlace = {
   updatedAt?: string;
   Reports?: DbReport[];
 };
+
+export interface DbPlaceWithGetter extends DbPlace {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get: (field: string) => any;
+}
 
 /**
  * Reported Covid test availability for a location. id and created are only
