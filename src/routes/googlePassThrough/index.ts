@@ -23,7 +23,12 @@ router.get('/searchGooglePlaces', async (req, res, next) => {
     const responseJson = (await response.json()) as any;
     const googlePlaces =
       responseJson.results as google.maps.places.PlaceResult[];
-    const results = await mergeGooglePlacesWithPlaces(googlePlaces);
+    const likelyRetailPlaces = googlePlaces.filter(
+      googlePlace =>
+        googlePlace.types?.includes('pharmacy') ||
+        googlePlace.types?.includes('store')
+    );
+    const results = await mergeGooglePlacesWithPlaces(likelyRetailPlaces);
     res.json(results);
   } catch (e) {
     next(e);
