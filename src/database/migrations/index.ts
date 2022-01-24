@@ -10,7 +10,7 @@ const umzug = new Umzug({
       {ignore: scriptName, cwd: path.dirname(__filename)},
     ],
   },
-  context: db.sequelize,
+  context: db,
   storage: new SequelizeStorage({sequelize: db.sequelize}),
   logger: console,
 });

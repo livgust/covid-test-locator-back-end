@@ -2,7 +2,8 @@ import {QueryInterface, DataTypes} from 'sequelize';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const up = async ({context}: {context: any}) => {
-  const queryInterface = context.getQueryInterface() as QueryInterface;
+  const queryInterface =
+    context.sequelize.getQueryInterface() as QueryInterface;
   await queryInterface.createTable('reports', {
     id: {
       allowNull: false,
