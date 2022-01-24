@@ -174,6 +174,35 @@ describe('maps DB places to Places', () => {
       distance: 1.5,
     });
   });
+
+  it('optionally adds website and phone number', () => {
+    const exampleDbPlace = {
+      id: 1,
+      googlePlaceId: 'ABC_123',
+      name: 'Test Pharmacy',
+      vicinity: '123 Easy Street',
+      latitude: 100,
+      longitude: 100,
+      createdAt: 'this-is-a-date-string',
+      createdBy: 'some-user',
+      updatedAt: 'this-is-a-date-string',
+      website: 'www.google.com',
+      phoneNumber: '(857) 867-5309',
+      get: () => {},
+    } as DbPlaceWithGetter;
+    expect(mapDbPlaceToPlace(exampleDbPlace)).toEqual({
+      id: 1,
+      googlePlaceId: 'ABC_123',
+      name: 'Test Pharmacy',
+      vicinity: '123 Easy Street',
+      location: {
+        lat: 100,
+        long: 100,
+      },
+      website: 'www.google.com',
+      phoneNumber: '(857) 867-5309',
+    });
+  });
 });
 
 describe('maps Place to DbPlace', () => {

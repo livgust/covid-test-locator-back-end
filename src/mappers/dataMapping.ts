@@ -58,6 +58,8 @@ export const mapDbPlaceToPlace = (dbPlace: DbPlaceWithGetter): Place => {
     },
     distance: dbPlace.get('distance'),
     reports: Reports?.map(mapDbReportToReport),
+    website: dbPlace.website,
+    phoneNumber: dbPlace.phoneNumber,
   };
 };
 

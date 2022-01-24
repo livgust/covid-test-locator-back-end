@@ -24,6 +24,8 @@ export type DbPlace = {
   createdAt?: string;
   updatedAt?: string;
   Reports?: DbReport[];
+  phoneNumber?: string;
+  website?: string;
 };
 
 export interface DbPlaceWithGetter extends DbPlace {
