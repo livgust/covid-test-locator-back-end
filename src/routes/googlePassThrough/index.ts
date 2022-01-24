@@ -48,7 +48,6 @@ router.get('/geocode', async (req, res, next) => {
     );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const responseJson = (await response.json()) as any;
-    console.log(responseJson);
     const firstResult = responseJson.results?.[0];
     const location = firstResult?.geometry?.location as {
       lat: number;

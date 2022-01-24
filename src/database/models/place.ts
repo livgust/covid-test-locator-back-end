@@ -19,6 +19,8 @@ export default (sequelize: Sequelize, DataTypes: {[key: string]: DataType}) => {
       latitude: DataTypes.DECIMAL,
       longitude: DataTypes.DECIMAL,
       createdBy: DataTypes.STRING,
+      phoneNumber: DataTypes.STRING,
+      website: DataTypes.STRING,
     },
     {
       sequelize,

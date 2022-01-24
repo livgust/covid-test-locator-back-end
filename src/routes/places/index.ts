@@ -1,8 +1,10 @@
 import {Router} from 'express';
-import reportRouter from './reports/';
-import db from '../database/models';
-import {DbPlaceWithGetter, Place} from '../types';
-import {mapDbPlaceToPlace, mapPlaceToDbPlace} from '../mappers/dataMapping';
+import reportRouter from '../reports';
+import db from '../../database/models';
+import fetch from 'node-fetch';
+import {DbPlaceWithGetter, Place} from '../../types';
+import {mapDbPlaceToPlace, mapPlaceToDbPlace} from '../../mappers/dataMapping';
+import {URLSearchParams} from 'url';
 
 const router = Router();
 
@@ -43,9 +45,7 @@ router.get('/places', async (req, res, next) => {
       }),
       order: db.sequelize.col('distance'),
     })) as DbPlaceWithGetter[];
-    console.log(db.Pl);
     const places = dbPlaces.map(mapDbPlaceToPlace);
-    console.log(places);
     res.json(places);
   } catch (e) {
     next(e);
@@ -54,13 +54,40 @@ router.get('/places', async (req, res, next) => {
 
 router.post('/places', async (req, res, next) => {
   try {
-    const place = req.body as Place;
+    const place = await formatPlaceForSave(req.body as Place);
     const newPlace = await db.Place.create(mapPlaceToDbPlace(place));
     res.json(newPlace);
   } catch (e) {
     next(e);
   }
 });
+
+export const formatPlaceForSave = async (place: Place): Promise<Place> => {
+  const augmentativeData = await getAugmentativeGooglePlaceData(
+    place.googlePlaceId
+  );
+  return {...place, ...augmentativeData};
+};
+
+export const getAugmentativeGooglePlaceData = async (
+  googlePlaceId: string
+): Promise<{phoneNumber?: string; website?: string}> => {
+  const params = new URLSearchParams({
+    key: process.env.GOOGLE_API_KEY as string,
+    place_id: googlePlaceId,
+    fields: 'formatted_phone_number,website',
+  }).toString();
+  const response = await fetch(
+    `https://maps.googleapis.com/maps/api/place/details/json?${params}`
+  );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const responseJson = (await response.json())
+    .result as google.maps.places.PlaceResult;
+  return {
+    phoneNumber: responseJson.formatted_phone_number,
+    website: responseJson.website,
+  };
+};
 
 router.use('/places/:placeId', reportRouter);
 
