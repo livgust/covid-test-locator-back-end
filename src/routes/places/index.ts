@@ -62,6 +62,18 @@ router.post('/places', async (req, res, next) => {
   }
 });
 
+router.get('/online-retailers', async (req, res, next) => {
+  try {
+    const response = await fetch(
+      'https://covid-test-api.us-east-1.linodeobjects.com/export.json'
+    );
+    const responseJson = await response.json();
+    res.json(responseJson);
+  } catch (e) {
+    next(e);
+  }
+});
+
 export const formatPlaceForSave = async (place: Place): Promise<Place> => {
   const augmentativeData = await getAugmentativeGooglePlaceData(
     place.googlePlaceId
